@@ -1,0 +1,68 @@
+<!--
+    Autor: Kevin Chiguano
+    Fecha: 27/05/2024
+    Materia: Lenguajes de Programacion
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            background-color: #4CAF50; /* Changed color to match the image */
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h3 {
+            margin: 0;
+            color: white;
+        }
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5em;
+            transition: color 0.3s;
+        }
+        .menu a:hover {
+            color: #FF0000;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 80px); /* Adjust height based on navbar */
+            background: url('https://img.freepik.com/vector-premium/logotipo-tienda-digital-o-logotipo-productos-electronicos-o-logotipo-comercio-electronico_372882-55.jpg') no-repeat center center;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h3>Sistema de logueo</h3>
+    <div class="menu" id="menu">
+        <a href="/login_war_exploded/productos" title="Carrito de compras"><i class="fas fa-shopping-cart"></i></a>
+        <a href="/login_war_exploded/ServletLogin" title="Login"><i class="fas fa-user"></i></a>
+        <a href="/login_war_exploded/LogoutServlet" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+        <a href="/login_war_exploded/ver-carro" title="Ver Carro"><i class="fas fa-cart-arrow-down"></i></a>
+    </div>
+</div>
+<div class="container"></div>
+</body>
+</html>
