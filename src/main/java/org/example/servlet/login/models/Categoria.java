@@ -10,6 +10,12 @@ public class Categoria {
     public Categoria(){
 
     }
+    // Constructor con idCategoria y nombre
+    public Categoria(Integer idCategoria, String nombre) {
+        this.idCategoria = idCategoria;
+        this.nombre = nombre;
+    }
+
     public Categoria(Integer idCategoria, String nombre, Categoria categoria, String descripcion, int condicion) {
         this.idCategoria = idCategoria;
         this.nombre = nombre;

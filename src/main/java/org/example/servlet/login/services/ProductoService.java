@@ -1,5 +1,6 @@
 package org.example.servlet.login.services;
 
+import org.example.servlet.login.models.Categoria;
 import org.example.servlet.login.models.Producto;
 
 import java.util.List;
@@ -17,5 +18,11 @@ public interface ProductoService {
 
     //Implementamos un metodo para eliminar
     void eliminar(Integer id);
+
+    //Implementamos un metodo para listar la categoria
+    List<Categoria> listarCategorias();
+
+    //Implementamos un metodo para obtener el id de la categoria
+    Optional<Categoria> porIdCategoria(Integer id);
 
 }

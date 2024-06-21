@@ -12,6 +12,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
     private Connection conn;
 
     public ProductoRepositoryJdbcImpl(Connection conn) {
+
         this.conn = conn;
     }
 

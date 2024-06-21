@@ -12,4 +12,5 @@ public interface Repository <T>{
     T activar(Integer id) throws SQLException;
     T desactivar(Integer id) throws SQLException;
 
+
 }
