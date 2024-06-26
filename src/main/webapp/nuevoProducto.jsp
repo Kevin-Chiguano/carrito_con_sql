@@ -56,16 +56,26 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .error {
+            color: red;
+        }
+        .back-link {
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Agregar Nuevo Producto</h1>
-    <form action="GuardarProductoServlet" method="post">
+    <form action="formulario" method="post">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" value="<%= producto != null ? producto.getNombre() : "" %>" required>
+        <% if (errores != null && errores.containsKey("nombre")) { %>
+        <div class="error"><%= errores.get("nombre") %></div>
+        <% } %>
 
-        <label for="categoria">Categoria:</label>
+        <label for="categoria">Categoría:</label>
         <select id="categoria" name="categoria" required>
             <%
                 if (categorias != null && !categorias.isEmpty()) {
@@ -83,15 +93,29 @@
                 }
             %>
         </select>
+        <% if (errores != null && errores.containsKey("idCategoria")) { %>
+        <div class="error"><%= errores.get("idCategoria") %></div>
+        <% } %>
 
         <label for="descripcion">Descripción:</label>
         <input type="text" id="descripcion" name="descripcion" value="<%= producto != null ? producto.getDescripcion() : "" %>" required>
+        <% if (errores != null && errores.containsKey("descripcion")) { %>
+        <div class="error"><%= errores.get("descripcion") %></div>
+        <% } %>
 
         <label for="precio">Precio:</label>
         <input type="number" id="precio" name="precio" step="0.01" value="<%= producto != null ? producto.getPrecio() : "" %>" required>
+        <% if (errores != null && errores.containsKey("precio")) { %>
+        <div class="error"><%= errores.get("precio") %></div>
+        <% } %>
 
-        <input type="submit" value="Guardar Producto">
+        <input type="submit" value="<%= (producto != null && producto.getId() != null && producto.getId() > 0) ? "Editar" : "Crear" %>">
+
+        <input type="hidden" name="idProducto" value="<%= producto != null ? producto.getId() : "" %>">
     </form>
+    <div class="back-link">
+        <a href="productos">Regresar al listado de productos</a>
+    </div>
 </div>
 </body>
 </html>

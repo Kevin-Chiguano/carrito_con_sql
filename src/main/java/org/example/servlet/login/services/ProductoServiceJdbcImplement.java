@@ -18,53 +18,60 @@ public class ProductoServiceJdbcImplement implements ProductoService {
 
     public ProductoServiceJdbcImplement(Connection connection) {
         this.repositoryJdbc = new ProductoRepositoryJdbcImpl(connection);
-        this.repositoryCategoriaJdbc= new CategoriaRepositoryImplement(connection);
+        this.repositoryCategoriaJdbc = new CategoriaRepositoryImplement(connection);
     }
 
     @Override
     public List<Producto> listar() {
-        try{
+        try {
             return repositoryJdbc.listar();
-        }catch (SQLException throwables){
-            throw new ServiceJdbcException(throwables.getMessage(),throwables.getCause());
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 
     @Override
     public Optional<Producto> porId(Integer id) {
-        try{
+        try {
             return Optional.ofNullable(repositoryJdbc.porId(id));
         } catch (SQLException throwables) {
-            throw new ServiceJdbcException(throwables.getMessage(),throwables.getCause());
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 
     @Override
     public void guardar(Producto producto) {
-
+        try {
+            repositoryJdbc.guardar(producto);
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
+        }
     }
-
 
     @Override
     public void eliminar(Integer id) {
-
+        try {
+            repositoryJdbc.eliminar(id);
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
+        }
     }
 
     @Override
     public List<Categoria> listarCategorias() {
-        try{
+        try {
             return repositoryCategoriaJdbc.listar();
-        }catch (SQLException throwables){
-            throw new ServiceJdbcException(throwables.getMessage(),throwables.getCause());
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 
     @Override
     public Optional<Categoria> porIdCategoria(Integer id) {
-        try{
+        try {
             return Optional.ofNullable(repositoryCategoriaJdbc.porId(id));
-        }catch (SQLException throwables){
-            throw new ServiceJdbcException(throwables.getMessage(),throwables.getCause());
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 }

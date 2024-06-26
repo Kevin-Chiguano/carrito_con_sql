@@ -12,7 +12,6 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
     private Connection conn;
 
     public ProductoRepositoryJdbcImpl(Connection conn) {
-
         this.conn = conn;
     }
 
@@ -65,17 +64,24 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
     public void guardar(Producto producto) throws SQLException {
         String sql;
         if (producto.getId() != null && producto.getId() > 0) {
-            sql = "UPDATE articulo SET nombre=?, idcategoria=?, descripcion=?, precio=? WHERE idarticulo=?;";
+            // Actualizar producto existente
+            sql = "UPDATE articulo SET codigo=?, nombre=?, idcategoria=?, descripcion=?, precio=?, condicion=?, stock=?, imagen=? WHERE idarticulo=?;";
         } else {
-            sql = "INSERT INTO articulo(nombre, idcategoria, descripcion, precio, condicion) VALUES(?,?,?,?,1);";
+            // Insertar nuevo producto
+            sql = "INSERT INTO articulo(codigo, nombre, idcategoria, descripcion, precio, condicion, stock, imagen) VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
         }
         try (PreparedStatement smt = conn.prepareStatement(sql)) {
-            smt.setString(1, producto.getNombre());
-            smt.setInt(2, producto.getCategoria().getIdCategoria());
-            smt.setString(3, producto.getDescripcion());
-            smt.setDouble(4, producto.getPrecio());
+            smt.setString(1, producto.getCodigo());
+            smt.setString(2, producto.getNombre());
+            smt.setInt(3, producto.getCategoria().getIdCategoria());
+            smt.setString(4, producto.getDescripcion());
+            smt.setDouble(5, producto.getPrecio());
+            smt.setBoolean(6, producto.isCondicion());
+            smt.setInt(7, producto.getStock());
+            smt.setString(8, producto.getImagen());
+
             if (producto.getId() != null && producto.getId() > 0) {
-                smt.setInt(5, producto.getId());
+                smt.setInt(9, producto.getId());
             }
             smt.executeUpdate();
         }
@@ -92,12 +98,22 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
 
     @Override
     public Producto activar(Integer id) throws SQLException {
-        return null;
+        String sql = "UPDATE articulo SET condicion=true WHERE idarticulo=?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+        return porId(id);
     }
 
     @Override
     public Producto desactivar(Integer id) throws SQLException {
-        return null;
+        String sql = "UPDATE articulo SET condicion=false WHERE idarticulo=?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+        return porId(id);
     }
 
     private static Producto getProducto(ResultSet rs) throws SQLException {
@@ -113,7 +129,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
 
         Categoria c = new Categoria();
         c.setIdCategoria(rs.getInt("idcategoria"));
-        c.setNombre(rs.getString("categoria"));  // Asegurarse de que el alias es "categoria"
+        c.setNombre(rs.getString("categoria"));
         p.setCategoria(c);
 
         return p;

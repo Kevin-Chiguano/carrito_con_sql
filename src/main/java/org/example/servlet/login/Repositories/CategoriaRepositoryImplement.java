@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CategoriaRepositoryImplement implements Repository{
     private Connection conn;
-    public CategoriaRepositoryImplement(Connection connection) {
+    public CategoriaRepositoryImplement(Connection conn) {
         this.conn = conn;
 
     }
