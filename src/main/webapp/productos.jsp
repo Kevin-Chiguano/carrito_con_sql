@@ -61,6 +61,13 @@
         <% if (usernameOptional.isPresent()) { %>
         <td><%= p.getPrecio() %></td>
         <td class="add-to-cart"><a href="<%= request.getContextPath() + "/agregar-carro?id=" + p.getId() %>">Agregar al carro</a></td>
+        <td>
+            <a href="<%= request.getContextPath() + "/formulario?idProducto=" + p.getId() %>">Editar</a>
+            <form method="post" action="<%= request.getContextPath() + "/productos" %>">
+                <input type="hidden" name="idProducto" value="<%= p.getId() %>">
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
         <% } %>
     </tr>
     <% } %>

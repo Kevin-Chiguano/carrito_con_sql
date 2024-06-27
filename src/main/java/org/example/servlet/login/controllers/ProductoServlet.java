@@ -36,4 +36,32 @@ public class ProductoServlet extends HttpServlet {
         // Reenvía la solicitud al JSP
         getServletContext().getRequestDispatcher("/productos.jsp").forward(req, resp);
     }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Manejo de eliminación de producto
+        String idProductoStr = req.getParameter("idProducto");
+        if (idProductoStr != null && !idProductoStr.isEmpty()) {
+            try {
+                Integer idProducto = Integer.parseInt(idProductoStr);
+                ProductoService service = new ProductoServiceJdbcImplement((Connection) req.getAttribute("conn"));
+                service.eliminar(idProducto);
+                resp.sendRedirect(req.getContextPath() + "/productos");
+                return;
+            } catch (NumberFormatException | ServiceJdbcException e) {
+                // Manejo de errores
+                e.printStackTrace(); // O manejo específico de errores
+            }
+        }
+
+        // Manejo de edición de producto
+        // Redirección al formulario de edición con el ID del producto
+        String idEditar = req.getParameter("idEditar");
+        if (idEditar != null && !idEditar.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/formulario?idProducto=" + idEditar);
+            return;
+        }
+
+        // Si ninguna acción válida fue realizada, redirige de vuelta a la lista de productos
+        resp.sendRedirect(req.getContextPath() + "/productos");
+    }
 }

@@ -1,4 +1,4 @@
-package org.example.servlet.login.controllers;
+/*package org.example.servlet.login.controllers;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -68,3 +68,4 @@ public class NuevoProductoServlet extends HttpServlet {
         return categorias;
     }
 }
+*/
