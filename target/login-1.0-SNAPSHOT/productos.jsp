@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="org.example.servlet.login.models.Producto" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Optional" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +22,10 @@
         .add-product-btn { text-align: center; margin-bottom: 20px; }
         .add-product-btn a { padding: 10px 20px; border: none; background-color: #28a745; color: #fff; cursor: pointer; border-radius: 5px; text-decoration: none; }
         .add-product-btn a:hover { background-color: #218838; }
+        .edit-btn { background-color: #ffc107; color: #fff; padding: 5px 10px; text-decoration: none; border-radius: 5px; }
+        .edit-btn:hover { background-color: #e0a800; }
+        .delete-btn { background-color: #dc3545; color: #fff; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .delete-btn:hover { background-color: #c82333; }
     </style>
 </head>
 <body>
@@ -32,9 +36,15 @@
 <h1>Listado de productos</h1>
 <div>
     <%
-        Optional<String> usernameOptional = (Optional<String>) request.getAttribute("username");
-        if (usernameOptional.isPresent()) {
-            out.println("HOLA <span>" + usernameOptional.get() + "</span>, BIENVENIDO!");
+
+        String username = null;
+        String role = null;
+        if (session != null) {
+            username = (String) session.getAttribute("username");
+            role = (String) session.getAttribute("role");
+        }
+        if (username != null) {
+            out.println("HOLA <span>" + username + "</span>, BIENVENIDO!");
         }
     %>
 </div>
@@ -44,7 +54,7 @@
         <th>nombre</th>
         <th>categoria</th>
         <th>descripcion</th>
-        <% if (usernameOptional.isPresent()) { %>
+        <% if (username != null) { %>
         <th>precio</th>
         <th>Acción</th>
         <% } %>
@@ -58,23 +68,28 @@
         <td><%= p.getNombre() %></td>
         <td><%= p.getCategoria().getNombre() %></td>
         <td><%= p.getDescripcion() %></td>
-        <% if (usernameOptional.isPresent()) { %>
+        <% if (username != null) { %>
         <td><%= p.getPrecio() %></td>
         <td class="add-to-cart"><a href="<%= request.getContextPath() + "/agregar-carro?id=" + p.getId() %>">Agregar al carro</a></td>
+        <% if ("admin".equals(role)) { %>
         <td>
-            <a href="<%= request.getContextPath() + "/formulario?idProducto=" + p.getId() %>">Editar</a>
-            <form method="post" action="<%= request.getContextPath() + "/productos" %>">
+            <a href="<%= request.getContextPath() + "/formulario?idProducto=" + p.getId() %>" class="edit-btn">Editar</a>
+            <form method="post" action="<%= request.getContextPath() + "/productos" %>" style="display:inline;">
                 <input type="hidden" name="idProducto" value="<%= p.getId() %>">
-                <button type="submit">Eliminar</button>
+                <button type="submit" class="delete-btn">Eliminar</button>
             </form>
         </td>
+        <% } %>
         <% } %>
     </tr>
     <% } %>
 </table>
+
+<% if ("admin".equals(role)) { %>
 <div class="add-product-btn">
     <a href="<%= request.getContextPath()%>/formulario">Agregar Nuevo Producto</a>
 </div>
+<% } %>
 <div style="text-align: center;">
     <button onclick="window.location.href='<%= request.getContextPath() + "/index.html" %>'">Regresar</button>
 </div>

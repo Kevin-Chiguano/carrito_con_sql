@@ -18,8 +18,10 @@ import java.util.Optional;
  */
 @WebServlet({"/Login", "/ServletLogin"})
 public class ServletLogin extends HttpServlet {
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "1234";
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "1234";
+    private static final String USER_USERNAME = "user";
+    private static final String USER_PASSWORD = "1234";
 
     /**
      * Maneja las solicitudes GET para verificar si el usuario ya ha iniciado sesión.
@@ -36,6 +38,8 @@ public class ServletLogin extends HttpServlet {
 
         if (usernameOptional.isPresent()) {
             // El usuario ha iniciado sesión, se muestra un mensaje de bienvenida
+            HttpSession session = req.getSession();
+            String role = (String) session.getAttribute("role");
             resp.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = resp.getWriter()) {
                 out.println("<html>");
@@ -55,7 +59,7 @@ public class ServletLogin extends HttpServlet {
                 out.println("<body>");
                 out.println("<h1>Servlet Login</h1>");
                 out.println("<div class='container'>");
-                out.println("<p>Hola <strong>" + usernameOptional.get() + "</strong>, has iniciado sesión con éxito.</p>");
+                out.println("<p>Hola <strong>" + usernameOptional.get() + "</strong>, has iniciado sesión con éxito como <strong>" + role + "</strong>.</p>");
                 out.println("<p><a href='" + req.getContextPath() + "/index.html'>Volver</a></p>");
                 out.println("<p><a href='" + req.getContextPath() + "/LogoutServlet'><button>Cerrar Sesión</button></a></p>");
                 out.println("</div>");
@@ -82,11 +86,17 @@ public class ServletLogin extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        // Verifica las credenciales
-        if (USERNAME.equals(username) && PASSWORD.equals(password)) {
-            // Credenciales correctas, se crea una nueva sesión y se redirige a la página de bienvenida
-            HttpSession session = req.getSession();
+        // Verifica las credenciales y asigna el rol correspondiente
+        HttpSession session = req.getSession();
+        if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
+            // Credenciales de administrador correctas
             session.setAttribute("username", username);
+            session.setAttribute("role", "admin");
+            resp.sendRedirect(req.getContextPath() + "/ServletLogin");
+        } else if (USER_USERNAME.equals(username) && USER_PASSWORD.equals(password)) {
+            // Credenciales de usuario correctas
+            session.setAttribute("username", username);
+            session.setAttribute("role", "user");
             resp.sendRedirect(req.getContextPath() + "/ServletLogin");
         } else {
             // Credenciales incorrectas, se envía un error de autorización
